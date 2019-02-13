@@ -93,7 +93,7 @@
                         <configuration>
                             <classifier>spring-boot</classifier>
                             <mainClass>
-                                com.carsecurity.authorization.MilkyWayApplication
+                                com.carsecurity.authorization.CarSecurityAuthorizationApplication
                             </mainClass>
                         </configuration>
                     </execution>
