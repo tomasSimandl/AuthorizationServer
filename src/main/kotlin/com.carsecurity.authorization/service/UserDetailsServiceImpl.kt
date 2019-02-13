@@ -29,17 +29,11 @@ class UserDetailsServiceImpl(
     }
 
     private fun getGrantedAuthorities(roles: Collection<Role>): MutableCollection<out GrantedAuthority> {
-        val permissions = HashSet<String>()
-
-        roles.map { role ->
-            permissions.add(role.name)
-            role.permissions.mapTo(permissions) { permission -> permission.name }
-        }
 
         val authorities = ArrayList<GrantedAuthority>()
-        permissions.mapTo(authorities) { permission ->
-            logger.info("Granted permission is $permission")
-            SimpleGrantedAuthority(permission)
+        roles.mapTo(authorities) { role ->
+            logger.info("Granted permission is ${role.name}")
+            SimpleGrantedAuthority(role.name)
         }
 
         return authorities

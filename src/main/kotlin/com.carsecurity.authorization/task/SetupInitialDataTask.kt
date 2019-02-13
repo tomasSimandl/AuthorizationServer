@@ -1,9 +1,7 @@
 package com.carsecurity.authorization.task
 
-import com.carsecurity.authorization.domain.Permission
 import com.carsecurity.authorization.domain.Role
 import com.carsecurity.authorization.domain.User
-import com.carsecurity.authorization.service.PermissionService
 import com.carsecurity.authorization.service.RoleService
 import com.carsecurity.authorization.service.UserService
 import org.springframework.context.ApplicationListener
@@ -14,8 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class SetupUserDataTask(
         private val userService: UserService,
-        private val roleService: RoleService,
-        private val permissionService: PermissionService
+        private val roleService: RoleService
 ) : ApplicationListener<ContextRefreshedEvent> {
     private var alreadySetup = false
 
@@ -24,28 +21,17 @@ class SetupUserDataTask(
         if (alreadySetup) return
         alreadySetup = true
 
-        val readPermission = createPermissionIfNotFound("READ_PERMISSION")
-        val writePermission = createPermissionIfNotFound("WRITE_PERMISSION")
 
-        val adminRole = createRoleIfNotFound("ROLE_ADMIN", hashSetOf(readPermission, writePermission))
-        val userRole = createRoleIfNotFound("ROLE_USER", hashSetOf(readPermission))
+        val adminRole = createRoleIfNotFound("ROLE_ADMIN")
+        val userRole = createRoleIfNotFound("ROLE_USER")
 
         createUserIfNotFound("user1", "abcd1234", hashSetOf(adminRole, userRole))
         createUserIfNotFound("user2", "123456", hashSetOf(userRole))
     }
 
     @Transactional
-    fun createPermissionIfNotFound(name: String): Permission {
-        val permission = Permission(name = name)
-        var retrieval = permissionService.tryCreate(permission)
-        if (!retrieval.isPresent)
-            retrieval = permissionService.findByName(name)
-        return retrieval.get()
-    }
-
-    @Transactional
-    fun createRoleIfNotFound(name: String, permissions: Set<Permission>): Role {
-        val role = Role(name = name, permissions = permissions)
+    fun createRoleIfNotFound(name: String): Role {
+        val role = Role(name = name)
         var retrieval = roleService.tryCreate(role)
         if (!retrieval.isPresent)
             retrieval = roleService.findByName(name)

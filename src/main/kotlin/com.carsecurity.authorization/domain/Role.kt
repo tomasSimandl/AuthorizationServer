@@ -12,14 +12,6 @@ data class Role(
         @Column(nullable = false, unique = true)
         val name: String = "",
 
-        @ManyToMany(fetch = FetchType.LAZY)
-        @JoinTable(
-                name = "role_permission",
-                joinColumns = [JoinColumn(name = "role_id")],
-                inverseJoinColumns = [JoinColumn(name = "permission_id")]
-        )
-        val permissions: Set<Permission> = HashSet(),
-
         @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
         val users: Set<User> = HashSet()
 
