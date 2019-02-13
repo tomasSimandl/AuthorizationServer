@@ -34,9 +34,8 @@ class WebSecurityConfiguration(
         http
 //                .cors().and()
                 .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic()
+                .anyRequest()
+                .authenticated()
     }
 
     @Bean
