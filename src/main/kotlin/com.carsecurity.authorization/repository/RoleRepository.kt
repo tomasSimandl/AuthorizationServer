@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Repository
-@Transactional(propagation = Propagation.MANDATORY)
 interface RoleRepository: JpaRepository<Role, Long> {
     fun findByName(name: String): Optional<Role>
 }

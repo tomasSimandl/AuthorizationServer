@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Repository
-@Transactional(propagation = Propagation.MANDATORY)
 interface UserRepository: JpaRepository<User, Long> {
     fun findByUsername(username: String): Optional<User>
 }
