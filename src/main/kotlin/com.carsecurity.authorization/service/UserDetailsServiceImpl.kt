@@ -1,6 +1,7 @@
 package com.carsecurity.authorization.service
 
 import com.carsecurity.authorization.domain.Role
+import com.carsecurity.authorization.domain.User
 import com.carsecurity.authorization.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.GrantedAuthority
@@ -37,5 +38,13 @@ class UserDetailsServiceImpl(
         }
 
         return authorities
+    }
+
+    fun isOwner(userDetails: Any, userId: Long): Boolean{
+        if(userDetails is User) {
+            return userDetails.id == userId
+        }
+
+        return false
     }
 }

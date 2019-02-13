@@ -10,6 +10,7 @@ import java.util.*
 class RoleServiceImpl(
         private val repo: RoleRepository
 ) : RoleService {
+
     @Transactional
     override fun tryCreate(role: Role): Optional<Role> {
         if (repo.findByName(role.name).isPresent)
@@ -19,4 +20,11 @@ class RoleServiceImpl(
 
     @Transactional
     override fun findByName(name: String) = repo.findByName(name)
+
+    @Transactional
+    override fun findRolesByName(rolesStr: List<String>): List<Role> {
+
+        val roles = repo.findAll()
+        return roles.filter { role -> rolesStr.contains(role.name) }
+    }
 }

@@ -10,7 +10,7 @@ import javax.persistence.*
 data class User(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private val id: Long = 0,
+        val id: Long = 0,
 
         @Column(nullable = false, unique = true)
         private var username: String = "",
@@ -31,11 +31,15 @@ data class User(
 
         @Column(name = "non_expired", nullable = false)
         private val nonExpired: Boolean = true,
+
         @Column(name = "non_locked", nullable = false)
         private val nonLocked: Boolean = true,
+
         @Column(nullable = false)
         private val enabled: Boolean = true,
+
         @Column(name = "credentials_non_expired", nullable = false)
+
         private val credentialsNonExpired: Boolean = true
 ) : UserDetails, Serializable {
     override fun getUsername() = username

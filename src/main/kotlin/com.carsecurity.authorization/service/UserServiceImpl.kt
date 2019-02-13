@@ -10,15 +10,45 @@ import java.util.*
 @Service
 class UserServiceImpl(
         private val repo: UserRepository,
-        private val encoder: PasswordEncoder
+        private val passwordEncoder: PasswordEncoder
 ) : UserService {
+
+
     @Transactional
     override fun tryCreate(user: User): Optional<User> {
-        if (repo.findByUsername(user.username).isPresent)
-            return Optional.empty()
-        return Optional.of(repo.save(user.copy(password = encoder.encode(user.password))))
+        return if (repo.findByUsername(user.username).isPresent) {
+            Optional.empty()
+        } else {
+            Optional.of(repo.save(user.copy(password = passwordEncoder.encode(user.password))))
+        }
     }
+
 
     @Transactional
     override fun findByUsername(username: String) = repo.findByUsername(username)
+
+    @Transactional
+    override fun getUsers(): List<User> = repo.findAll()
+
+    @Transactional
+    override fun getUser(id: Long): Optional<User> = repo.findById(id)
+
+
+    @Transactional
+    override fun update(user: User): Optional<User> {
+        val dbUserOptional = repo.findByUsername(user.username)
+
+        if (dbUserOptional.isPresent && dbUserOptional.get().id != user.id) {
+            return Optional.empty()
+        }
+
+        return Optional.of(repo.save(user.copy(password = passwordEncoder.encode(user.password))))
+    }
+
+
+    @Transactional
+    override fun delete(user: User) = repo.delete(user)
+
+    @Transactional
+    override fun deleteById(id: Long) = repo.deleteById(id)
 }
