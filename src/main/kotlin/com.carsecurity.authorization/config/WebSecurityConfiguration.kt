@@ -11,15 +11,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
-import javax.sql.DataSource
 
 @Configuration
 @EnableWebSecurity
 class WebSecurityConfiguration(
         @Qualifier("userDetailsServiceImpl")
-        private val userDetailsService: UserDetailsService,
-
-        private val dataSource: DataSource
+        private val userDetailsService: UserDetailsService
 
 ) : WebSecurityConfigurerAdapter() {
 
