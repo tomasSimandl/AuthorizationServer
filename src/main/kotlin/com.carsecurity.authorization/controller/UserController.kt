@@ -91,7 +91,7 @@ class UserController(
 
     private fun getAndCheckUser(userDTO: UserDTO): Optional<User> {
 
-        val roles = roleService.findRolesByName(userDTO.roles)
+        val roles = roleService.findRolesByName(userDTO.roles.toList())
 
         if (
                 userDTO.username.isBlank() ||
