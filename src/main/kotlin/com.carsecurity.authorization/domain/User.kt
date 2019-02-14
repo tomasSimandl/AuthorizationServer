@@ -18,7 +18,7 @@ data class User(
         @Column(nullable = false)
         private var password: String =  "",
 
-        @ManyToMany
+        @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
         @JoinTable(
                 name = "user_role",
                 joinColumns = [JoinColumn(name = "user_id")],

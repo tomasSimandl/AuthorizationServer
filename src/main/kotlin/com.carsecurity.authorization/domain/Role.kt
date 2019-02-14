@@ -12,7 +12,12 @@ data class Role(
         @Column(nullable = false, unique = true)
         val name: String = "",
 
-        @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+        @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+        @JoinTable(
+                name = "user_role",
+                joinColumns = [JoinColumn(name = "role_id")],
+                inverseJoinColumns = [JoinColumn(name = "user_id")]
+        )
         val users: Set<User> = HashSet()
 
 ) : Serializable {
