@@ -14,34 +14,6 @@ create table oauth_client_details (
   autoapprove VARCHAR(256)
 );
 
-INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
-web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, autoapprove)
-VALUES (
-        "my-client",
-        "milky-way,authorization-manage",
-        "{bcrypt}$2a$10$Hq/4xBuNd5uXwdzi2XPoruNgpStT.Arhc.r2KX6J2SR5Twfc/iBEu",
-        "write,read",
-        "refresh_token,password",
-        NULL,
-        "ROLE_CLIENT,ROLE_TRUSTED_CLIENT",
-        10080,
-        43200,
-        "true");
-
-INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
-web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, autoapprove)
-VALUES (
-         "create-client",
-         "authorization-manage",
-         "{bcrypt}$2a$10$Hq/4xBuNd5uXwdzi2XPoruNgpStT.Arhc.r2KX6J2SR5Twfc/iBEu",
-         "write,read",
-         "refresh_token,password,client_credentials",
-         NULL,
-         "ROLE_USER_REGISTRATION_CLIENT",
-         10080,
-         43200,
-         "true");
-
 drop table if exists oauth_client_token;
 create table oauth_client_token (
   token_id VARCHAR(256),
@@ -74,36 +46,45 @@ create table oauth_code (
   code VARCHAR(256), authentication BLOB
 );
 
--- drop table if exists oauth_approvals;
--- create table oauth_approvals (
--- 	userId VARCHAR(256),
--- 	clientId VARCHAR(256),
--- 	scope VARCHAR(256),
--- 	status VARCHAR(10),
--- 	expiresAt TIMESTAMP,
--- 	lastModifiedAt TIMESTAMP
--- );
---
---
--- -- customized oauth_client_details table
--- drop table if exists ClientDetails;
--- create table ClientDetails (
---   appId VARCHAR(256) PRIMARY KEY,
---   resourceIds VARCHAR(256),
---   appSecret VARCHAR(256),
---   scope VARCHAR(256),
---   grantTypes VARCHAR(256),
---   redirectUrl VARCHAR(256),
---   authorities VARCHAR(256),
---   access_token_validity INTEGER,
---   refresh_token_validity INTEGER,
---   additionalInformation VARCHAR(4096),
---   autoApproveScopes VARCHAR(256)
--- );
---
--- drop table if exists  authorities;
---
--- create table authorities (
---   username varchar(50) Not null primary key,
---   authority varchar(50) not null
--- )
+
+INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
+                                  web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, autoapprove)
+VALUES (
+         "rest-client",
+         "rest-client",
+         "{bcrypt}$2a$10$Hq/4xBuNd5uXwdzi2XPoruNgpStT.Arhc.r2KX6J2SR5Twfc/iBEu",
+         "write,read",
+         "refresh_token,client_credentials",
+         NULL,
+         "ROLE_CLIENT,ROLE_TRUSTED_CLIENT",
+         3600,
+         43200,
+         "true");
+
+INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
+                                  web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, autoapprove)
+VALUES (
+         "mobile-app-client",
+         "mobile-app-client",
+         "{bcrypt}$2a$10$Hq/4xBuNd5uXwdzi2XPoruNgpStT.Arhc.r2KX6J2SR5Twfc/iBEu",
+         "write,read",
+         "refresh_token,password",
+         NULL,
+         "ROLE_CLIENT,ROLE_TRUSTED_CLIENT,ROLE_USER_REGISTRATION_CLIENT",
+         3600,
+         15734800,
+         "true");
+
+INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
+                                  web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, autoapprove)
+VALUES (
+         "create-client",
+         "authorization-manage",
+         "{bcrypt}$2a$10$Hq/4xBuNd5uXwdzi2XPoruNgpStT.Arhc.r2KX6J2SR5Twfc/iBEu",
+         "write,read",
+         "refresh_token,password,client_credentials",
+         NULL,
+         "ROLE_USER_REGISTRATION_CLIENT",
+         10080,
+         43200,
+         "true");
