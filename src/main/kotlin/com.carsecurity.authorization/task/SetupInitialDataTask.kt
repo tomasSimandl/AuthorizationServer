@@ -24,8 +24,9 @@ class SetupUserDataTask(
 
         val adminRole = createRoleIfNotFound("ROLE_ADMIN")
         val userRole = createRoleIfNotFound("ROLE_USER")
+        val superRole = createRoleIfNotFound("ROLE_SUPER_ADMIN")
 
-        createUserIfNotFound("user1", "abcd1234", hashSetOf(adminRole, userRole))
+        createUserIfNotFound("user1", "abcd1234", hashSetOf(adminRole, userRole, superRole))
         createUserIfNotFound("user2", "123456", hashSetOf(userRole))
     }
 
