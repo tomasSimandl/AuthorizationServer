@@ -1,4 +1,4 @@
-package com.carsecurity.authorization.service
+package com.carsecurity.authorization.service.impl
 
 import com.carsecurity.authorization.domain.Role
 import com.carsecurity.authorization.domain.User

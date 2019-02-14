@@ -1,7 +1,8 @@
-package com.carsecurity.authorization.service
+package com.carsecurity.authorization.service.impl
 
 import com.carsecurity.authorization.domain.User
 import com.carsecurity.authorization.repository.UserRepository
+import com.carsecurity.authorization.service.UserService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

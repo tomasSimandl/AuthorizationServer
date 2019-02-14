@@ -1,7 +1,8 @@
-package com.carsecurity.authorization.service
+package com.carsecurity.authorization.service.impl
 
 import com.carsecurity.authorization.domain.Role
 import com.carsecurity.authorization.repository.RoleRepository
+import com.carsecurity.authorization.service.RoleService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
