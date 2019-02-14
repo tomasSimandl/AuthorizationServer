@@ -9,6 +9,7 @@ interface UserService {
 
     // SELECT
     fun findByUsername(username: String): Optional<User>
+    fun findAllByUsername(username: List<String>): List<User>
     fun getUsers(): List<User>
     fun getUser(id: Long): Optional<User>
 

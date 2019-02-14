@@ -10,4 +10,6 @@ import java.util.*
 @Repository
 interface UserRepository: JpaRepository<User, Long> {
     fun findByUsername(username: String): Optional<User>
+
+    fun findAllByUsernameIsIn(username: List<String>): List<User>
 }

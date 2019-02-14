@@ -27,4 +27,16 @@ class RoleServiceImpl(
         val roles = repo.findAll()
         return roles.filter { role -> rolesStr.contains(role.name) }
     }
+
+    @Transactional
+    override fun findById(id: Long): Optional<Role> = repo.findById(id)
+
+    @Transactional
+    override fun getRoles(): List<Role> = repo.findAll()
+
+    @Transactional
+    override fun update(role: Role): Optional<Role> = Optional.of(repo.save(role))
+
+    @Transactional
+    override fun deleteById(id: Long) = repo.deleteById(id)
 }

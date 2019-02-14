@@ -28,6 +28,9 @@ class UserServiceImpl(
     override fun findByUsername(username: String) = repo.findByUsername(username)
 
     @Transactional
+    override fun findAllByUsername(username: List<String>): List<User> = repo.findAllByUsernameIsIn(username)
+
+    @Transactional
     override fun getUsers(): List<User> = repo.findAll()
 
     @Transactional
