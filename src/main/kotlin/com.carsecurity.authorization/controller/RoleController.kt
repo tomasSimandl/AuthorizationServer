@@ -22,11 +22,11 @@ class RoleController(
 
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     fun getRole(): List<RoleDTO> = roleService.getRoles().map { role -> RoleDTO(role) }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     fun createRole(@RequestBody roleCreate: RoleDTO): ResponseEntity<RoleDTO> {
 
         roleCreate.id = 0
@@ -54,7 +54,7 @@ class RoleController(
     }
 
     @PutMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     fun updateRole(@RequestBody roleUpdate: RoleDTO): ResponseEntity<RoleDTO> {
 
         // check if id exists
@@ -91,7 +91,7 @@ class RoleController(
     }
 
     @DeleteMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     fun deleteRole(@RequestParam(name = "id") roleId: Long) {
         roleService.deleteById(roleId)
     }
