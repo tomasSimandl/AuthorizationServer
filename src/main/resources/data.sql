@@ -51,7 +51,7 @@ INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope,
                                   web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, autoapprove)
 VALUES (
          "rest-client",
-         "rest-client",
+         "authorization-server",
          "{bcrypt}$2a$10$Hq/4xBuNd5uXwdzi2XPoruNgpStT.Arhc.r2KX6J2SR5Twfc/iBEu",
          "write,read",
          "refresh_token,client_credentials",
@@ -65,7 +65,7 @@ INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope,
                                   web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, autoapprove)
 VALUES (
          "mobile-app-client",
-         "mobile-app-client",
+         "rest-client",
          "{bcrypt}$2a$10$Hq/4xBuNd5uXwdzi2XPoruNgpStT.Arhc.r2KX6J2SR5Twfc/iBEu",
          "write,read",
          "refresh_token,password",
@@ -79,7 +79,7 @@ INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope,
                                   web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, autoapprove)
 VALUES (
          "create-client",
-         "authorization-manage",
+         "authorization-server",
          "{bcrypt}$2a$10$Hq/4xBuNd5uXwdzi2XPoruNgpStT.Arhc.r2KX6J2SR5Twfc/iBEu",
          "write,read",
          "refresh_token,password,client_credentials",
