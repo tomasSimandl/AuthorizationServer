@@ -41,6 +41,7 @@ data class User(
         @Column(name = "credentials_non_expired", nullable = false)
 
         private val credentialsNonExpired: Boolean = true
+
 ) : UserDetails, Serializable {
     override fun getUsername() = username
     override fun getPassword() = password
