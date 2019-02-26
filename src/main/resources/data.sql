@@ -70,7 +70,7 @@ VALUES (
          "write,read",
          "refresh_token,password",
          NULL,
-         "ROLE_CLIENT,ROLE_TRUSTED_CLIENT,ROLE_USER_REGISTRATION_CLIENT",
+         "ROLE_CLIENT,ROLE_TRUSTED_CLIENT",
          3600,
          15734800,
          "true");
@@ -78,13 +78,13 @@ VALUES (
 INSERT INTO oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types,
                                   web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, autoapprove)
 VALUES (
-         "create-client",
-         "authorization-server",
+         "web-client",
+         "authorization-server,rest-client",
          "{bcrypt}$2a$10$Hq/4xBuNd5uXwdzi2XPoruNgpStT.Arhc.r2KX6J2SR5Twfc/iBEu",
          "write,read",
          "refresh_token,password,client_credentials",
          NULL,
-         "ROLE_USER_REGISTRATION_CLIENT",
+         "ROLE_CLIENT,ROLE_TRUSTED_CLIENT,ROLE_USER_REGISTRATION_CLIENT",
          10080,
          43200,
          "true");
