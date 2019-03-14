@@ -35,6 +35,19 @@ class UserController(
         }
     }
 
+    @GetMapping(params = ["username"])
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @userDetailsServiceImpl.isOwner(principal, #username)")
+    fun getUserByUsername(@RequestParam(name = "username") username: String): ResponseEntity<UserDTO> {
+
+        val userOptional = userService.findByUsername(username)
+
+        return if (userOptional.isPresent) {
+            ResponseEntity.ok(UserDTO(userOptional.get()))
+        } else {
+            ResponseEntity(HttpStatus.NOT_FOUND)
+        }
+    }
+
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     fun getUsers(): List<UserDTO> = userService.getUsers().map { user -> UserDTO(user) }

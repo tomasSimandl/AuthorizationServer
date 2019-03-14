@@ -44,6 +44,13 @@ class UserDetailsServiceImpl(
         if(userDetails is User) {
             return userDetails.id == userId
         }
+        return false
+    }
+
+    fun isOwner(userDetails: Any, username: String): Boolean{
+        if(userDetails is User) {
+            return userDetails.username == username
+        }
 
         return false
     }

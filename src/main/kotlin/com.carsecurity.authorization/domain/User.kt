@@ -18,6 +18,9 @@ data class User(
         @Column(nullable = false)
         private var password: String =  "",
 
+        @Column(nullable = false)
+        var email: String = "",
+
         @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
         @JoinTable(
                 name = "user_role",
