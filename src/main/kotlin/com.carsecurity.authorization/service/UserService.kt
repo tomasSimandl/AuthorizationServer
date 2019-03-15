@@ -15,6 +15,7 @@ interface UserService {
 
     // UPDATE
     fun update(user: User): Optional<User>
+    fun updateWithoutPassword(user: User): Optional<User>
 
     // DELETE
     fun delete(user: User)

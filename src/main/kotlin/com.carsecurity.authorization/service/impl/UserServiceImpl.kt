@@ -49,6 +49,17 @@ class UserServiceImpl(
         return Optional.of(repo.save(user.copy(password = passwordEncoder.encode(user.password))))
     }
 
+    @Transactional
+    override fun updateWithoutPassword(user: User): Optional<User> {
+        val dbUserOptional = repo.findByUsername(user.username)
+
+        if (dbUserOptional.isPresent && dbUserOptional.get().id != user.id) {
+            return Optional.empty()
+        }
+
+        return Optional.of(repo.save(user))
+    }
+
 
     @Transactional
     override fun delete(user: User) = repo.delete(user)

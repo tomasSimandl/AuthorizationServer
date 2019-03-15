@@ -93,6 +93,28 @@ class UserController(
         }
     }
 
+    @PutMapping(params = ["id", "email"])
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @userDetailsServiceImpl.isOwner(principal, #userId)")
+    fun updateUsersEmail(
+            @RequestParam(name = "id") userId: Long,
+            @RequestParam(name = "email") email: String
+    ): ResponseEntity<UserDTO> {
+
+        val userOptional = userService.getUser(userId)
+        if(!userOptional.isPresent) {
+            logger.debug("Can not update user. User does not exists.")
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
+        userOptional.get().email = email
+        val updatedUserOptional = userService.updateWithoutPassword(userOptional.get())
+        return if (updatedUserOptional.isPresent) {
+            ResponseEntity.ok(UserDTO(updatedUserOptional.get()))
+        } else {
+            ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+    }
+
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or @userDetailsServiceImpl.isOwner(principal, #userId)")
     fun deleteUser(@RequestParam(name = "id") userId: Long) {
