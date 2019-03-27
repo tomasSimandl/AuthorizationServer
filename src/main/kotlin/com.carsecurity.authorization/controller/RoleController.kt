@@ -10,7 +10,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
-
+/**
+ * Controller used for managing users roles. Only user with role SUPER_ADMIN can access this controllers.
+ *
+ * @param userService is service for access users in database.
+ * @param roleService is service for access roles in database.
+ */
 @RestController
 @RequestMapping("role")
 class RoleController(
@@ -18,13 +23,24 @@ class RoleController(
         private val roleService: RoleService
 
 ) {
+    /** Logger of this class. */
     private val logger = LoggerFactory.getLogger(javaClass)
 
-
+    /**
+     * Method returns list of all available roles in database.
+     * @return list of [RoleDTO] which can be append to user.
+     */
     @GetMapping
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     fun getRole(): List<RoleDTO> = roleService.getRoles().map { role -> RoleDTO(role) }
 
+    /**
+     * Method create new role in database according to given role. When role can not be created http return code is
+     * BAD_REQUEST.
+     *
+     * @param roleCreate is role which will be created in database.
+     * @return created role from database.
+     */
     @PostMapping
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     fun createRole(@RequestBody roleCreate: RoleDTO): ResponseEntity<RoleDTO> {
@@ -53,6 +69,13 @@ class RoleController(
         }
     }
 
+    /**
+     * This method is used for updating existing role in database. [roleUpdate] must contains identification number of
+     * role in database. When role can not be updated http status code BAD_REQUEST will be returned.
+     *
+     * @param roleUpdate is role which will be updated in database.
+     * @return update role from database.
+     */
     @PutMapping
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     fun updateRole(@RequestBody roleUpdate: RoleDTO): ResponseEntity<RoleDTO> {
@@ -90,6 +113,10 @@ class RoleController(
         }
     }
 
+    /**
+     * Method delete role from database.
+     * @param roleId identification of deleted role.
+     */
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     fun deleteRole(@RequestParam(name = "id") roleId: Long) {

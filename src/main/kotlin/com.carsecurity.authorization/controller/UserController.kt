@@ -11,7 +11,12 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
-
+/**
+ * This controller is used for access and manage users in database.
+ *
+ * @param userService is service for access users in database.
+ * @param roleService is service for access roles in database.
+ */
 @RestController
 @RequestMapping("user")
 class UserController(
@@ -19,9 +24,15 @@ class UserController(
         private val roleService: RoleService
 
 ) {
+    /** Logger of this class. */
     private val logger = LoggerFactory.getLogger(javaClass)
 
-
+    /**
+     * Method get and return requested user from database. For access login user must be admin or be the user.
+     *
+     * @param userId identification number of user.
+     * @return user which was found in database.
+     */
     @GetMapping(params = ["id"])
     @PreAuthorize("hasRole('ROLE_ADMIN') or @userDetailsServiceImpl.isOwner(principal, #userId)")
     fun getUser(@RequestParam(name = "id") userId: Long): ResponseEntity<UserDTO> {
@@ -35,6 +46,12 @@ class UserController(
         }
     }
 
+    /**
+     * Method get and return requeseted user from database. For access login user must be admin or be the user.
+     *
+     * @param username is username of requested user.
+     * @return user which was found in database.
+     */
     @GetMapping(params = ["username"])
     @PreAuthorize("hasRole('ROLE_ADMIN') or @userDetailsServiceImpl.isOwner(principal, #username)")
     fun getUserByUsername(@RequestParam(name = "username") username: String): ResponseEntity<UserDTO> {
@@ -48,17 +65,29 @@ class UserController(
         }
     }
 
+    /**
+     * Method return list of all users in database. For this resource have access only user with ADMIN role.
+     *
+     * @return list of [UserDTO] which was found in database.
+     */
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     fun getUsers(): List<UserDTO> = userService.getUsers().map { user -> UserDTO(user) }
 
+    /**
+     * Method creates new user in database. Users can be created by user with ADMIN role or client with
+     * USER_REGISTRATION role.
+     *
+     * @param userCreate user which will be created in database.
+     * @return user which was created in database.
+     */
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER_REGISTRATION_CLIENT')")
     fun createUser(@RequestBody userCreate: UserDTO): ResponseEntity<UserDTO> {
 
         userCreate.id = 0
         val userOptional = getAndCheckUser(userCreate)
-        if(!userOptional.isPresent) {
+        if (!userOptional.isPresent) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
@@ -70,18 +99,25 @@ class UserController(
         }
     }
 
+    /**
+     * Method update user in database. This operation can perform only user with role ADMIN and user can update own
+     * account.
+     *
+     * @param userUpdate is user which will be updated in database.
+     * @return updated user from database.
+     */
     @PutMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or @userDetailsServiceImpl.isOwner(principal, #userUpdate.id)")
     fun updateUser(@RequestBody userUpdate: UserDTO): ResponseEntity<UserDTO> {
 
         val userOptional = userService.getUser(userUpdate.id)
-        if(!userOptional.isPresent) {
+        if (!userOptional.isPresent) {
             logger.debug("Can not update user. User does not exists.")
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
         val updateDbUser = getAndCheckUser(userUpdate)
-        if(!updateDbUser.isPresent) {
+        if (!updateDbUser.isPresent) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
@@ -93,6 +129,14 @@ class UserController(
         }
     }
 
+    /**
+     * Method update only users email in database. This operation can perform only user with role ADMIN and user can
+     * update own account.
+     *
+     * @param email new email which will be stored in database.
+     * @param userId of user which will be updated in database.
+     * @return user from database which was updated.
+     */
     @PutMapping(params = ["id", "email"])
     @PreAuthorize("hasRole('ROLE_ADMIN') or @userDetailsServiceImpl.isOwner(principal, #userId)")
     fun updateUsersEmail(
@@ -101,7 +145,7 @@ class UserController(
     ): ResponseEntity<UserDTO> {
 
         val userOptional = userService.getUser(userId)
-        if(!userOptional.isPresent) {
+        if (!userOptional.isPresent) {
             logger.debug("Can not update user. User does not exists.")
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
@@ -115,6 +159,12 @@ class UserController(
         }
     }
 
+    /**
+     * Method delete user in database. This operation can perform only user with role ADMIN and user can update
+     * own account.
+     *
+     * @param userId identification of user which will be deleted.
+     */
     @DeleteMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or @userDetailsServiceImpl.isOwner(principal, #userId)")
     fun deleteUser(@RequestParam(name = "id") userId: Long) {
@@ -123,6 +173,12 @@ class UserController(
         // TODO (after delete user logout user (remove token))
     }
 
+    /**
+     * Method check input [userDTO] and when everything is OK return user created form [userDTO] which can be stored
+     * in database.
+     * @param userDTO is user of which will be created database user.
+     * @return empty [Optional] when input user is invalid or [User] when everything is OK.
+     */
     private fun getAndCheckUser(userDTO: UserDTO): Optional<User> {
 
         val roles = roleService.findRolesByName(userDTO.roles.toList())

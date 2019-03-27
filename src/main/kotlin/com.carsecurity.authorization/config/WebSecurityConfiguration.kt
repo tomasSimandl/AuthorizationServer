@@ -12,6 +12,11 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 
+/**
+ * Configuration of web security.
+ *
+ * @param userDetailsService Core interface which loads user-specific data.
+ */
 @Configuration
 @EnableWebSecurity
 class WebSecurityConfiguration(
@@ -20,32 +25,41 @@ class WebSecurityConfiguration(
 
 ) : WebSecurityConfigurerAdapter() {
 
+    /**
+     * Encoder for password hashing.
+     */
     @Bean
     fun passwordEncoder(): PasswordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder()
 
+    /**
+     * Description copied from interface: WebSecurityConfigurerAdapter
+     * Used by the default implementation of authenticationManager() to attempt to obtain an AuthenticationManager.
+     * If overridden, the AuthenticationManagerBuilder should be used to specify the AuthenticationManager.
+     *
+     * @param auth the AuthenticationManagerBuilder to use
+     */
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userDetailsService)
     }
 
+    /**
+     * Configuration of security to required authentication on every request.
+     *
+     * @param http is security which will be configured.
+     */
     override fun configure(http: HttpSecurity) {
         http
-//                .cors().and()
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()
     }
 
+    /**
+     * Processes an Authentication request.
+     */
     @Bean
     override fun authenticationManagerBean(): AuthenticationManager {
         return super.authenticationManagerBean()
     }
 
-//    @Bean
-//    fun oauth2TokenFilterRegistrationBean(): FilterRegistrationBean<OAuth2TokenFilter> {
-//        val registry = FilterRegistrationBean<OAuth2TokenFilter>()
-//        registry.filter = OAuth2TokenFilter()
-//        registry.order = Ordered.HIGHEST_PRECEDENCE
-//        registry.urlPatterns = listOf("/oauth/token")
-//        return registry
-//    }
 }
