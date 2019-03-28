@@ -10,6 +10,13 @@ import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
+/**
+ * Class used for filling database with some mock data.
+ *
+ * @param userService for access data in user table.
+ * @param roleService for access data in role table.
+ * @param initializationMode is mode if data should be inserted in database. Take from properties.
+ */
 @Component
 class SetupUserDataTask(
         private val userService: UserService,
@@ -17,8 +24,13 @@ class SetupUserDataTask(
         @Value("\${spring.datasource.initialization-mode}")
         private val initializationMode: String
 ) : ApplicationListener<ContextRefreshedEvent> {
+    /** Identification if database fill already been perform. */
     private var alreadySetup = false
 
+    /**
+     * Method insert mock users and roles to database. When [initializationMode] is set to 'never' no data are
+     * inserted.
+     */
     @Transactional
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
         if (alreadySetup) return
