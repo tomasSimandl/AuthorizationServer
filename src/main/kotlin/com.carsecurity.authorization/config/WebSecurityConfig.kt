@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
  */
 @Configuration
 @EnableWebSecurity
-class WebSecurityConfiguration(
+class WebSecurityConfig(
         @Qualifier("userDetailsServiceImpl")
         private val userDetailsService: UserDetailsService
 
