@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -16,12 +17,14 @@ import java.util.*
  *
  * @param userService is service for access users in database.
  * @param roleService is service for access roles in database.
+ * @param passwordEncoder is encoder used for hashing passwords.
  */
 @RestController
 @RequestMapping("user")
 class UserController(
         private val userService: UserService,
-        private val roleService: RoleService
+        private val roleService: RoleService,
+        private val passwordEncoder: PasswordEncoder
 
 ) {
     /** Logger of this class. */
@@ -152,6 +155,43 @@ class UserController(
 
         userOptional.get().email = email
         val updatedUserOptional = userService.updateWithoutPassword(userOptional.get())
+        return if (updatedUserOptional.isPresent) {
+            ResponseEntity.ok(UserDTO(updatedUserOptional.get()))
+        } else {
+            ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    /**
+     * Method update only users password in database. This operation can perform only user with role ADMIN and user can
+     * update own account.
+     *
+     * @param oldPassword old password which will be updated.
+     * @param newPassword new users password.
+     * @param userId of user which will be updated in database.
+     * @return user from database which was updated.
+     */
+    @PutMapping(params = ["id", "old_password", "new_password"])
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @userDetailsServiceImpl.isOwner(principal, #userId)")
+    fun updateUsersPassword(
+            @RequestParam(name = "id") userId: Long,
+            @RequestParam(name = "old_password") oldPassword: String,
+            @RequestParam(name = "new_password") newPassword: String
+    ): ResponseEntity<UserDTO> {
+
+        val userOptional = userService.getUser(userId)
+        if (!userOptional.isPresent) {
+            logger.debug("Can not update user. User does not exists.")
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
+        if (!passwordEncoder.matches(oldPassword, userOptional.get().password)) {
+            logger.debug("Can not update users password. Old password did not match.")
+            return ResponseEntity(HttpStatus.UNAUTHORIZED)
+        }
+
+        val newUser = userOptional.get().copy(password = newPassword)
+        val updatedUserOptional = userService.update(newUser)
         return if (updatedUserOptional.isPresent) {
             ResponseEntity.ok(UserDTO(updatedUserOptional.get()))
         } else {
