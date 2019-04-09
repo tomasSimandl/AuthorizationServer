@@ -190,6 +190,11 @@ class UserController(
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
         }
 
+        if (newPassword.length < 8){
+            logger.debug("Can not update users password. Password is too short.")
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+
         val newUser = userOptional.get().copy(password = newPassword)
         val updatedUserOptional = userService.update(newUser)
         return if (updatedUserOptional.isPresent) {
@@ -226,6 +231,7 @@ class UserController(
         if (
                 userDTO.username.isBlank() ||
                 userDTO.password.isBlank() ||
+                userDTO.password.length < 8 ||
                 roles.size != userDTO.roles.size
         ) {
             logger.debug("Username is empty OR password is empty OR roles does not exists." +
