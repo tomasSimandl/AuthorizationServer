@@ -52,7 +52,6 @@ class RoleController(
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
 
-
         val role = Role(
                 id = roleCreate.id,
                 name = roleCreate.name,

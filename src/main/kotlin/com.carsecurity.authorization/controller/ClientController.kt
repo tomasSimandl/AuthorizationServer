@@ -29,13 +29,19 @@ class ClientController(
     /** Logger for this class. */
     private val logger = LoggerFactory.getLogger(javaClass)
     /** Service for accessing clients data. */
-    private val clientService = JdbcClientDetailsService(dataSource)
+    private lateinit var clientService: JdbcClientDetailsService
 
     /**
      * Initialization of clientService. Correct passwordEncoder is set to it.
      */
     init {
+        setClientService(JdbcClientDetailsService(dataSource))
         clientService.setPasswordEncoder(passwordEncoder)
+    }
+
+
+    final fun setClientService(clientService: JdbcClientDetailsService) {
+        this.clientService = clientService
     }
 
     /**

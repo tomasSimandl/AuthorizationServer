@@ -81,7 +81,7 @@ class UserServiceImpl(
     override fun update(user: User): Optional<User> {
         val dbUserOptional = repo.findByUsername(user.username)
 
-        if (dbUserOptional.isPresent && dbUserOptional.get().id != user.id) {
+        if (!dbUserOptional.isPresent || dbUserOptional.get().id != user.id) {
             return Optional.empty()
         }
 
@@ -98,11 +98,11 @@ class UserServiceImpl(
     override fun updateWithoutPassword(user: User): Optional<User> {
         val dbUserOptional = repo.findByUsername(user.username)
 
-        if (dbUserOptional.isPresent && dbUserOptional.get().id != user.id) {
+        if (!dbUserOptional.isPresent || dbUserOptional.get().id != user.id) {
             return Optional.empty()
         }
 
-        return Optional.of(repo.save(user))
+        return Optional.of(repo.save(user.copy(password = dbUserOptional.get().password)))
     }
 
     /**

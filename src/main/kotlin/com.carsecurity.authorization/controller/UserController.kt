@@ -190,7 +190,7 @@ class UserController(
             return ResponseEntity(HttpStatus.UNAUTHORIZED)
         }
 
-        if (newPassword.length < 8){
+        if (newPassword.length < 8) {
             logger.debug("Can not update users password. Password is too short.")
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
@@ -249,7 +249,8 @@ class UserController(
                 nonExpired = userDTO.nonExpired,
                 nonLocked = userDTO.nonLocked,
                 enabled = userDTO.enabled,
-                credentialsNonExpired = userDTO.credentialsNonExpired)
+                credentialsNonExpired = userDTO.credentialsNonExpired,
+                email = userDTO.email)
 
         return Optional.of(user)
     }
