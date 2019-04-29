@@ -1,4 +1,3 @@
--- used in tests that use HSQL
 drop table if exists oauth_client_details;
 create table oauth_client_details (
   client_id VARCHAR(256) PRIMARY KEY,

@@ -37,11 +37,11 @@ class SetupUserDataTask(
         if (initializationMode == "never") return
         alreadySetup = true
 
-        val adminRole = roleService.tryCreate(Role(name = "ROLE_ADMIN")).get()
+//        val adminRole = roleService.tryCreate(Role(name = "ROLE_ADMIN")).get()
+//        val superRole = roleService.tryCreate(Role(name = "ROLE_SUPER_ADMIN")).get()
         val userRole = roleService.tryCreate(Role(name = "ROLE_USER")).get()
-        val superRole = roleService.tryCreate(Role(name = "ROLE_SUPER_ADMIN")).get()
 
-        userService.tryCreate(User(username = "admin", password = "admin", email = "tomas.simandl@gmail.com", roles = hashSetOf(adminRole, userRole, superRole)))
-        userService.tryCreate(User(username = "user", password = "123456", email = "simi159@seznam.cz", roles = hashSetOf(userRole)))
+        userService.tryCreate(User(username = "user1", password = "12345678", email = "", roles = hashSetOf(userRole)))
+        userService.tryCreate(User(username = "user2", password = "12345678", email = "", roles = hashSetOf(userRole)))
     }
 }
